@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FileText, RotateCw } from 'lucide-react';
+import { FileText, RotateCw, Filter as FilterIcon } from 'lucide-react';
 import { LogViewer } from './components/LogViewer';
 import { FilterManager } from './components/FilterManager';
 import { FilterModal } from './components/FilterModal';
@@ -10,6 +10,7 @@ import './App.css';
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingFilter, setEditingFilter] = useState<Filter | undefined>();
+  const [showOnlyHighlighted, setShowOnlyHighlighted] = useState(false);
   const { loadFile, addFilter, updateFilter, filePath } = useLogStore();
 
   const handleOpenFile = async () => {
@@ -63,6 +64,18 @@ function App() {
         )}
 
         <button
+          onClick={() => setShowOnlyHighlighted(!showOnlyHighlighted)}
+          className={`flex items-center gap-2 px-3 py-1.5 rounded text-sm transition-colors ${showOnlyHighlighted
+              ? 'bg-green-600 hover:bg-green-500 text-white'
+              : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+            }`}
+          title={showOnlyHighlighted ? 'Show all lines' : 'Show only highlighted lines'}
+        >
+          <FilterIcon className="w-4 h-4" />
+          {showOnlyHighlighted ? 'Highlighted Only' : 'Show All'}
+        </button>
+
+        <button
           onClick={handleReload}
           disabled={!filePath}
           className="flex items-center gap-2 px-3 py-1.5 bg-gray-700 hover:bg-gray-600 rounded text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -83,7 +96,7 @@ function App() {
 
       {/* Main Content Area - 70% */}
       <div className="flex-[7] min-h-0">
-        <LogViewer />
+        <LogViewer showOnlyHighlighted={showOnlyHighlighted} />
       </div>
 
       {/* Filter Manager - 30% */}
