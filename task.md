@@ -1,7 +1,7 @@
 # Task List
 
-- [ ] Project Initialization
-    - [ ] Initialize Electron + React + TS project
+- [/] Project Initialization
+    - [/] Initialize Electron + React + TS project
     - [ ] Install Tailwind CSS and dependencies
     - [ ] Configure Tailwind
 - [ ] Core Logic Implementation
