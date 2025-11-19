@@ -1,25 +1,25 @@
 # Task List
 
-- [/] Project Initialization
-    - [/] Initialize Electron + React + TS project
-    - [ ] Install Tailwind CSS and dependencies
-    - [ ] Configure Tailwind
-- [ ] Core Logic Implementation
-    - [ ] Create Zustand store (`useLogStore`)
-    - [ ] Implement file reading logic (Main process)
-    - [ ] Implement filter logic (regex, include/exclude)
-- [ ] UI Implementation
-    - [ ] Create App Layout (Top Bar, Main Area, Bottom Panel)
-    - [ ] Implement LogViewer (Virtualized)
-    - [ ] Implement FilterManager (Tabs, List)
-    - [ ] Implement FilterModal
-- [ ] Feature Integration
-    - [ ] Connect File Open to Store
-    - [ ] Connect Filter UI to Store
-    - [ ] Implement Save/Load Tab
-- [ ] Styling and Polish
-    - [ ] Apply Dark Mode
-    - [ ] Polish UI components
-- [ ] Verification
-    - [ ] Test with large file
-    - [ ] Verify all requirements
+- [x] Project Initialization
+    - [x] Initialize Electron + React + TS project
+    - [x] Install Tailwind CSS and dependencies
+    - [x] Configure Tailwind
+- [x] Core Logic Implementation
+    - [x] Create Zustand store (`useLogStore`)
+    - [x] Implement file reading logic (Main process)
+    - [x] Implement filter logic (regex, include/exclude)
+- [x] UI Implementation
+    - [x] Create App Layout (Top Bar, Main Area, Bottom Panel)
+    - [x] Implement LogViewer (Virtualized)
+    - [x] Implement FilterManager (Tabs, List)
+    - [x] Implement FilterModal
+- [x] Feature Integration
+    - [x] Connect File Open to Store
+    - [x] Connect Filter UI to Store
+    - [x] Implement Save/Load Tab
+- [x] Styling and Polish
+    - [x] Apply Dark Mode
+    - [x] Polish UI components
+- [x] Verification
+    - [x] Test with large file
+    - [x] Verify all requirements

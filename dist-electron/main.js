@@ -1,8 +1,7 @@
-import { app, BrowserWindow } from "electron";
-import { createRequire } from "node:module";
+import { app, BrowserWindow, ipcMain, dialog } from "electron";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
-createRequire(import.meta.url);
+import fs from "node:fs";
 const __dirname$1 = path.dirname(fileURLToPath(import.meta.url));
 process.env.APP_ROOT = path.join(__dirname$1, "..");
 const VITE_DEV_SERVER_URL = process.env["VITE_DEV_SERVER_URL"];
@@ -38,6 +37,44 @@ app.on("activate", () => {
   }
 });
 app.whenReady().then(createWindow);
+ipcMain.handle("open-file-dialog", async () => {
+  const result = await dialog.showOpenDialog({
+    properties: ["openFile"],
+    filters: [
+      { name: "Log Files", extensions: ["log", "txt"] },
+      { name: "All Files", extensions: ["*"] }
+    ]
+  });
+  if (result.canceled || result.filePaths.length === 0) {
+    return null;
+  }
+  const filePath = result.filePaths[0];
+  const content = fs.readFileSync(filePath, "utf-8");
+  return { content, path: filePath };
+});
+ipcMain.handle("save-file-dialog", async (_event, defaultName) => {
+  const result = await dialog.showSaveDialog({
+    defaultPath: defaultName,
+    filters: [{ name: "JSON Files", extensions: ["json"] }]
+  });
+  return result.filePath || null;
+});
+ipcMain.handle("write-file", async (_event, filePath, content) => {
+  try {
+    fs.writeFileSync(filePath, content, "utf-8");
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+});
+ipcMain.handle("read-file", async (_event, filePath) => {
+  try {
+    const content = fs.readFileSync(filePath, "utf-8");
+    return { success: true, content };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+});
 export {
   MAIN_DIST,
   RENDERER_DIST,
