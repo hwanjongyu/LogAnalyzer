@@ -43,9 +43,13 @@ Filter options:
 ## 📸 Screenshots
 
 ### Main Interface
-The app features a split-pane layout with the log viewer on top (70%) and filter management at the bottom (30%).
+![Main Interface](images/LogAnalyzer.png)
+
+The app features a split-pane layout with the log viewer on top and filter management at the bottom.
 
 ### Filter Modal
+![Filter Modal](images/EditFilter.png)
+
 Create filters with an intuitive dialog featuring:
 - Text/regex pattern input
 - Color picker for text and background
