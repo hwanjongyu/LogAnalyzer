@@ -68,15 +68,15 @@ export function FilterModal({ isOpen, onClose, onSave, initialFilter }: FilterMo
 
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-gray-800 rounded-lg shadow-xl w-full max-w-md mx-4 border border-gray-700">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md mx-4 border border-gray-200 dark:border-gray-700">
                 {/* Header */}
-                <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700">
-                    <h2 className="text-lg font-semibold text-white">
+                <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                         {initialFilter ? 'Edit Filter' : 'Add Filter'}
                     </h2>
                     <button
                         onClick={onClose}
-                        className="text-gray-400 hover:text-white transition-colors"
+                        className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
                     >
                         <X className="w-5 h-5" />
                     </button>
@@ -86,7 +86,7 @@ export function FilterModal({ isOpen, onClose, onSave, initialFilter }: FilterMo
                 <div className="px-6 py-4 space-y-4">
                     {/* Filter Text */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Filter Text / Pattern
                         </label>
                         <input
@@ -94,14 +94,14 @@ export function FilterModal({ isOpen, onClose, onSave, initialFilter }: FilterMo
                             value={filterText}
                             onChange={(e) => setFilterText(e.target.value)}
                             placeholder="Enter text or regex pattern..."
-                            className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-blue-500"
+                            className="w-full px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-500"
                             autoFocus
                         />
                     </div>
 
                     {/* Color Presets */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Color Presets
                         </label>
                         <div className="grid grid-cols-2 gap-2">
@@ -112,7 +112,7 @@ export function FilterModal({ isOpen, onClose, onSave, initialFilter }: FilterMo
                                         setTextColor(preset.text);
                                         setBackgroundColor(preset.bg);
                                     }}
-                                    className="px-3 py-2 rounded text-sm border border-gray-600 hover:border-gray-500 transition-colors"
+                                    className="px-3 py-2 rounded text-sm border border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 transition-colors"
                                     style={{
                                         color: preset.text,
                                         backgroundColor: preset.bg,
@@ -127,7 +127,7 @@ export function FilterModal({ isOpen, onClose, onSave, initialFilter }: FilterMo
                     {/* Custom Colors */}
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 Text Color
                             </label>
                             <div className="flex items-center gap-2">
@@ -135,19 +135,19 @@ export function FilterModal({ isOpen, onClose, onSave, initialFilter }: FilterMo
                                     type="color"
                                     value={textColor}
                                     onChange={(e) => setTextColor(e.target.value)}
-                                    className="w-12 h-10 rounded border border-gray-600 cursor-pointer"
+                                    className="w-12 h-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
                                 />
                                 <input
                                     type="text"
                                     value={textColor}
                                     onChange={(e) => setTextColor(e.target.value)}
-                                    className="flex-1 px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-blue-500 font-mono text-sm"
+                                    className="flex-1 px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-500 font-mono text-sm"
                                 />
                             </div>
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 Background Color
                             </label>
                             <div className="flex items-center gap-2">
@@ -155,13 +155,13 @@ export function FilterModal({ isOpen, onClose, onSave, initialFilter }: FilterMo
                                     type="color"
                                     value={backgroundColor}
                                     onChange={(e) => setBackgroundColor(e.target.value)}
-                                    className="w-12 h-10 rounded border border-gray-600 cursor-pointer"
+                                    className="w-12 h-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
                                 />
                                 <input
                                     type="text"
                                     value={backgroundColor}
                                     onChange={(e) => setBackgroundColor(e.target.value)}
-                                    className="flex-1 px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-blue-500 font-mono text-sm"
+                                    className="flex-1 px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-500 font-mono text-sm"
                                 />
                             </div>
                         </div>
@@ -169,7 +169,7 @@ export function FilterModal({ isOpen, onClose, onSave, initialFilter }: FilterMo
 
                     {/* Preview */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Preview
                         </label>
                         <div
@@ -186,7 +186,7 @@ export function FilterModal({ isOpen, onClose, onSave, initialFilter }: FilterMo
 
                     {/* Filter Type */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Filter Type
                         </label>
                         <div className="grid grid-cols-3 gap-2">
@@ -198,14 +198,14 @@ export function FilterModal({ isOpen, onClose, onSave, initialFilter }: FilterMo
                                         'px-3 py-2 rounded text-sm capitalize transition-colors border',
                                         filterType === type
                                             ? 'bg-blue-600 text-white border-blue-500'
-                                            : 'bg-gray-700 text-gray-300 border-gray-600 hover:border-gray-500'
+                                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
                                     )}
                                 >
                                     {type}
                                 </button>
                             ))}
                         </div>
-                        <p className="text-xs text-gray-400 mt-2">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
                             {filterType === 'highlight' && 'Highlight matching lines without filtering'}
                             {filterType === 'include' && 'Show only lines that match this filter'}
                             {filterType === 'exclude' && 'Hide lines that match this filter'}
@@ -219,9 +219,9 @@ export function FilterModal({ isOpen, onClose, onSave, initialFilter }: FilterMo
                                 type="checkbox"
                                 checked={caseSensitive}
                                 onChange={(e) => setCaseSensitive(e.target.checked)}
-                                className="w-4 h-4 rounded bg-gray-700 border-gray-600 text-blue-600 focus:ring-blue-500 focus:ring-offset-gray-800"
+                                className="w-4 h-4 rounded bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800"
                             />
-                            <span className="text-sm text-gray-300">Case-sensitive</span>
+                            <span className="text-sm text-gray-700 dark:text-gray-300">Case-sensitive</span>
                         </label>
 
                         <label className="flex items-center gap-2 cursor-pointer">
@@ -229,18 +229,18 @@ export function FilterModal({ isOpen, onClose, onSave, initialFilter }: FilterMo
                                 type="checkbox"
                                 checked={isRegex}
                                 onChange={(e) => setIsRegex(e.target.checked)}
-                                className="w-4 h-4 rounded bg-gray-700 border-gray-600 text-blue-600 focus:ring-blue-500 focus:ring-offset-gray-800"
+                                className="w-4 h-4 rounded bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800"
                             />
-                            <span className="text-sm text-gray-300">Regular expression</span>
+                            <span className="text-sm text-gray-700 dark:text-gray-300">Regular expression</span>
                         </label>
                     </div>
                 </div>
 
                 {/* Footer */}
-                <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-700">
+                <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-200 dark:border-gray-700">
                     <button
                         onClick={onClose}
-                        className="px-4 py-2 text-sm text-gray-300 bg-gray-700 rounded hover:bg-gray-600 transition-colors"
+                        className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
                     >
                         Cancel
                     </button>

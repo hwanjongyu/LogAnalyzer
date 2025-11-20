@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FileText, RotateCw, Filter as FilterIcon } from 'lucide-react';
+import { FileText, RotateCw, Filter as FilterIcon, Sun, Moon } from 'lucide-react';
 import { LogViewer } from './components/LogViewer';
 import { FilterManager } from './components/FilterManager';
 import { FilterModal } from './components/FilterModal';
@@ -11,7 +11,7 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingFilter, setEditingFilter] = useState<Filter | undefined>();
   const [showOnlyHighlighted, setShowOnlyHighlighted] = useState(false);
-  const { loadFile, addFilter, updateFilter, filePath } = useLogStore();
+  const { loadFile, addFilter, updateFilter, filePath, theme, toggleTheme } = useLogStore();
 
   const handleOpenFile = async () => {
     const result = await window.electronAPI.openFileDialog();
@@ -50,15 +50,15 @@ function App() {
   };
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-gray-900 text-white overflow-hidden">
+    <div className={`${theme} h-screen w-screen flex flex-col bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white overflow-hidden`}>
       {/* Top Menu Bar */}
-      <div className="h-12 bg-gray-800 border-b border-gray-700 flex items-center px-4 gap-3 flex-shrink-0">
+      <div className="h-12 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center px-4 gap-3 flex-shrink-0">
         <h1 className="text-lg font-semibold">Log Analyzer</h1>
 
         <div className="flex-1" />
 
         {filePath && (
-          <span className="text-xs text-gray-400 truncate max-w-md" title={filePath}>
+          <span className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-md" title={filePath}>
             {filePath}
           </span>
         )}
@@ -66,8 +66,8 @@ function App() {
         <button
           onClick={() => setShowOnlyHighlighted(!showOnlyHighlighted)}
           className={`flex items-center gap-2 px-3 py-1.5 rounded text-sm transition-colors ${showOnlyHighlighted
-              ? 'bg-green-600 hover:bg-green-500 text-white'
-              : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+            ? 'bg-green-600 hover:bg-green-500 text-white'
+            : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300'
             }`}
           title={showOnlyHighlighted ? 'Show all lines' : 'Show only highlighted lines'}
         >
@@ -78,7 +78,7 @@ function App() {
         <button
           onClick={handleReload}
           disabled={!filePath}
-          className="flex items-center gap-2 px-3 py-1.5 bg-gray-700 hover:bg-gray-600 rounded text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 px-3 py-1.5 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-gray-700 dark:text-white"
           title="Reload file"
         >
           <RotateCw className="w-4 h-4" />
@@ -91,6 +91,14 @@ function App() {
         >
           <FileText className="w-4 h-4" />
           Open File
+        </button>
+
+        <button
+          onClick={toggleTheme}
+          className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-700 dark:text-gray-300"
+          title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+        >
+          {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
         </button>
       </div>
 

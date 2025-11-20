@@ -8,6 +8,7 @@ interface LogStore {
     tabs: FilterTab[];
     activeTabId: string;
     filePath: string | null;
+    theme: 'dark' | 'light';
 
     // Actions
     loadFile: (content: string, path: string) => void;
@@ -22,6 +23,7 @@ interface LogStore {
     saveTabToJson: (tabId: string) => string;
     loadTabFromJson: (tabId: string, json: string) => void;
     applyFilters: () => void;
+    toggleTheme: () => void;
 }
 
 const GLOBAL_TAB_ID = 'global';
@@ -39,6 +41,7 @@ export const useLogStore = create<LogStore>((set, get) => ({
     ],
     activeTabId: GLOBAL_TAB_ID,
     filePath: null,
+    theme: 'dark',
 
     loadFile: (content: string, path: string) => {
         const lines = content.split('\n');
@@ -247,6 +250,10 @@ export const useLogStore = create<LogStore>((set, get) => ({
         });
 
         set({ processedLines });
+    },
+
+    toggleTheme: () => {
+        set((state) => ({ theme: state.theme === 'dark' ? 'light' : 'dark' }));
     },
 }));
 

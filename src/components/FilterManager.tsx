@@ -44,9 +44,9 @@ export function FilterManager({ onAddFilter, onEditFilter }: FilterManagerProps)
     };
 
     return (
-        <div className="h-full bg-gray-900 border-t border-gray-700 flex flex-col">
+        <div className="h-full bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 flex flex-col">
             {/* Tab Bar */}
-            <div className="flex items-center gap-2 px-4 py-2 bg-gray-800 border-b border-gray-700 overflow-x-auto">
+            <div className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 overflow-x-auto">
                 {tabs.map((tab) => (
                     <div
                         key={tab.id}
@@ -54,7 +54,7 @@ export function FilterManager({ onAddFilter, onEditFilter }: FilterManagerProps)
                             'flex items-center gap-2 px-3 py-1.5 rounded-md cursor-pointer transition-colors group',
                             activeTabId === tab.id
                                 ? 'bg-blue-600 text-white'
-                                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                         )}
                         onClick={() => setActiveTab(tab.id)}
                     >
@@ -87,7 +87,7 @@ export function FilterManager({ onAddFilter, onEditFilter }: FilterManagerProps)
                                 }
                             }}
                             placeholder="Tab name..."
-                            className="px-2 py-1 text-sm bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-blue-500 w-32"
+                            className="px-2 py-1 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-500 w-32"
                             autoFocus
                         />
                         <button
@@ -100,7 +100,7 @@ export function FilterManager({ onAddFilter, onEditFilter }: FilterManagerProps)
                 ) : (
                     <button
                         onClick={() => setShowNewTabInput(true)}
-                        className="flex items-center gap-1 px-3 py-1.5 text-sm text-gray-400 hover:text-white hover:bg-gray-700 rounded-md transition-colors"
+                        className="flex items-center gap-1 px-3 py-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md transition-colors"
                     >
                         <Plus className="w-4 h-4" />
                         <span>New Tab</span>
@@ -111,19 +111,19 @@ export function FilterManager({ onAddFilter, onEditFilter }: FilterManagerProps)
             {/* Filter List */}
             <div className="flex-1 overflow-y-auto p-4">
                 <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-sm font-semibold text-gray-300">
+                    <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                         Filters ({activeTab?.filters.length || 0})
                     </h3>
                     <div className="flex gap-2">
                         <button
                             onClick={handleLoadTab}
-                            className="px-3 py-1 text-xs bg-gray-700 text-gray-300 rounded hover:bg-gray-600 transition-colors"
+                            className="px-3 py-1 text-xs bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
                         >
                             Load Tab
                         </button>
                         <button
                             onClick={handleSaveTab}
-                            className="px-3 py-1 text-xs bg-gray-700 text-gray-300 rounded hover:bg-gray-600 transition-colors"
+                            className="px-3 py-1 text-xs bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
                         >
                             Save Tab
                         </button>
@@ -140,7 +140,7 @@ export function FilterManager({ onAddFilter, onEditFilter }: FilterManagerProps)
                     {activeTab?.filters.map((filter) => (
                         <div
                             key={filter.id}
-                            className="bg-gray-800 rounded-lg p-3 border border-gray-700 hover:border-gray-600 transition-colors"
+                            className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors shadow-sm"
                         >
                             <div className="flex items-start gap-3">
                                 <button
@@ -148,9 +148,9 @@ export function FilterManager({ onAddFilter, onEditFilter }: FilterManagerProps)
                                     className="mt-0.5 flex-shrink-0"
                                 >
                                     {filter.enabled ? (
-                                        <Power className="w-4 h-4 text-green-400" />
+                                        <Power className="w-4 h-4 text-green-600 dark:text-green-400" />
                                     ) : (
-                                        <PowerOff className="w-4 h-4 text-gray-500" />
+                                        <PowerOff className="w-4 h-4 text-gray-400 dark:text-gray-500" />
                                     )}
                                 </button>
 
@@ -166,11 +166,11 @@ export function FilterManager({ onAddFilter, onEditFilter }: FilterManagerProps)
                                         >
                                             {filter.text}
                                         </div>
-                                        <span className="text-xs text-gray-500 uppercase">
+                                        <span className="text-xs text-gray-500 dark:text-gray-500 uppercase">
                                             {filter.type}
                                         </span>
                                     </div>
-                                    <div className="flex gap-2 text-xs text-gray-400">
+                                    <div className="flex gap-2 text-xs text-gray-500 dark:text-gray-400">
                                         {filter.isRegex && <span>Regex</span>}
                                         {filter.caseSensitive && <span>Case-sensitive</span>}
                                     </div>
@@ -179,13 +179,13 @@ export function FilterManager({ onAddFilter, onEditFilter }: FilterManagerProps)
                                 <div className="flex gap-1">
                                     <button
                                         onClick={() => onEditFilter(filter)}
-                                        className="p-1 text-gray-400 hover:text-blue-400 transition-colors"
+                                        className="p-1 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                                     >
                                         <Edit2 className="w-4 h-4" />
                                     </button>
                                     <button
                                         onClick={() => removeFilter(filter.id)}
-                                        className="p-1 text-gray-400 hover:text-red-400 transition-colors"
+                                        className="p-1 text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
                                     >
                                         <X className="w-4 h-4" />
                                     </button>
