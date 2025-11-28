@@ -5,7 +5,8 @@
   "asar": true,
   "productName": "Log Analyzer",
   "directories": {
-    "output": "release/${version}"
+    "output": "release/${version}",
+    "icon": "build/icon.png"
   },
   "files": [
     "dist",
