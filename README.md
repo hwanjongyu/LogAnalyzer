@@ -128,8 +128,8 @@ Custom Tabs
 3. Add filters specific to this view
 
 **To save/load configurations:**
-- Click **"Save Tab"** to export current tab filters to JSON
-- Click **"Load Tab"** to import filters from a JSON file
+- Click **"Save Filter"** to export current tab filters to JSON
+- Click **"Load Filter"** to import filters from a JSON file
 
 ### Filter Examples
 

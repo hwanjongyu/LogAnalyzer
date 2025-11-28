@@ -29,7 +29,7 @@ export function FilterManager({ onAddFilter, onEditFilter }: FilterManagerProps)
         if (!activeTab) return;
 
         const json = useLogStore.getState().saveTabToJson(activeTabId);
-        const filePath = await window.electronAPI.saveFileDialog(`${activeTab.name}.json`);
+        const filePath = await window.electronAPI.saveJsonDialog(`${activeTab.name}.json`);
 
         if (filePath) {
             await window.electronAPI.writeFile(filePath, json);
@@ -37,7 +37,7 @@ export function FilterManager({ onAddFilter, onEditFilter }: FilterManagerProps)
     };
 
     const handleLoadTab = async () => {
-        const result = await window.electronAPI.openFileDialog();
+        const result = await window.electronAPI.openJsonDialog();
         if (result) {
             useLogStore.getState().loadTabFromJson(activeTabId, result.content);
         }
@@ -119,13 +119,13 @@ export function FilterManager({ onAddFilter, onEditFilter }: FilterManagerProps)
                             onClick={handleLoadTab}
                             className="px-3 py-1 text-xs bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
                         >
-                            Load Tab
+                            Load Filter
                         </button>
                         <button
                             onClick={handleSaveTab}
                             className="px-3 py-1 text-xs bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
                         >
-                            Save Tab
+                            Save Filter
                         </button>
                         <button
                             onClick={onAddFilter}

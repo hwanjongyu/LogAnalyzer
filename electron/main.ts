@@ -86,7 +86,26 @@ ipcMain.handle('open-file-dialog', async () => {
   return { content, path: filePath }
 })
 
-ipcMain.handle('save-file-dialog', async (_event, defaultName: string) => {
+ipcMain.handle('open-json-dialog', async () => {
+  const result = await dialog.showOpenDialog({
+    properties: ['openFile'],
+    filters: [
+      { name: 'JSON Files', extensions: ['json'] },
+      { name: 'All Files', extensions: ['*'] },
+    ],
+  })
+
+  if (result.canceled || result.filePaths.length === 0) {
+    return null
+  }
+
+  const filePath = result.filePaths[0]
+  const content = fs.readFileSync(filePath, 'utf-8')
+
+  return { content, path: filePath }
+})
+
+ipcMain.handle('save-json-dialog', async (_event, defaultName: string) => {
   const result = await dialog.showSaveDialog({
     defaultPath: defaultName,
     filters: [{ name: 'JSON Files', extensions: ['json'] }],

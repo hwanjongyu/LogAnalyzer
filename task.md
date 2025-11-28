@@ -16,7 +16,7 @@
 - [x] Feature Integration
     - [x] Connect File Open to Store
     - [x] Connect Filter UI to Store
-    - [x] Implement Save/Load Tab
+    - [x] Implement Save/Load Filter
 - [x] Styling and Polish
     - [x] Apply Dark Mode
     - [x] Polish UI components
