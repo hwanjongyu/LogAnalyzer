@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { X, ChevronDown } from 'lucide-react';
 import { Filter, FilterType } from '../types';
 
 interface FilterModalProps {
@@ -58,6 +58,181 @@ const COLOR_OPTIONS = [
     { value: '#84cc16', label: 'Lime' },
     { value: '#eab308', label: 'Yellow Gold' },
 ];
+
+interface ColorDropdownProps {
+    value: string;
+    onChange: (value: string) => void;
+    options: { value: string; label: string }[];
+    label: string;
+    colorType: 'text' | 'background';
+}
+
+function ColorDropdown({ value, onChange, options, label, colorType }: ColorDropdownProps) {
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const selectedOption = options.find(opt => opt.value === value) || options[0];
+
+    return (
+        <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {label}
+            </label>
+            <div className="relative" ref={dropdownRef}>
+                <button
+                    type="button"
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="w-full px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-500 flex items-center justify-between"
+                >
+                    <div className="flex items-center">
+                        {selectedOption.value && (
+                            <div
+                                className="rounded text-xs border border-gray-400 flex-grow text-center"
+                                style={
+                                    colorType === 'text'
+                                        ? { color: selectedOption.value }
+                                        : { backgroundColor: selectedOption.value }
+                                }
+                            >
+                                {selectedOption.label}
+                            </div>
+                        )}
+                        {!selectedOption.value && (
+                            <span>{selectedOption.label}</span>
+                        )}
+                    </div>
+                    <ChevronDown className="w-4 h-4" />
+                </button>
+                {isOpen && (
+                    <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded shadow-lg max-h-60 overflow-y-auto">
+                        {options.map((option) => (
+                            <button
+                                key={option.value}
+                                type="button"
+                                onClick={() => {
+                                    onChange(option.value);
+                                    setIsOpen(false);
+                                }}
+                                className="w-full px-3 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 flex items-center text-gray-900 dark:text-white"
+                            >
+                                {option.value && (
+                                    <div
+                                        className="rounded text-xs border border-gray-400 flex-grow text-center"
+                                        style={
+                                            colorType === 'text'
+                                                ? { color: option.value }
+                                                : { backgroundColor: option.value }
+                                        }
+                                    >
+                                        {option.label}
+                                    </div>
+                                )}
+                                {!option.value && (
+                                    <span>{option.label}</span>
+                                )}
+                            </button>
+                        ))}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
+
+interface PresetDropdownProps {
+    value: string;
+    onChange: (value: string) => void;
+}
+
+function PresetDropdown({ value, onChange }: PresetDropdownProps) {
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const selectedPreset = PRESET_COLORS.find(p => p.value === value) || PRESET_COLORS[0];
+
+    return (
+        <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Preset
+            </label>
+            <div className="relative" ref={dropdownRef}>
+                <button
+                    type="button"
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="w-full px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-500 flex items-center justify-between"
+                >
+                    <div className="flex items-center">
+                        {selectedPreset.value !== 'default' && (
+                            <div
+                                className="rounded text-xs border border-gray-400 flex-grow text-center"
+                                style={{
+                                    color: selectedPreset.text,
+                                    backgroundColor: selectedPreset.bg
+                                }}
+                            >
+                                {selectedPreset.label}
+                            </div>
+                        )}
+                        {selectedPreset.value === 'default' && (
+                            <span>{selectedPreset.label}</span>
+                        )}
+                    </div>
+                    <ChevronDown className="w-4 h-4" />
+                </button>
+                {isOpen && (
+                    <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded shadow-lg max-h-60 overflow-y-auto">
+                        {PRESET_COLORS.map((preset) => (
+                            <button
+                                key={preset.value}
+                                type="button"
+                                onClick={() => {
+                                    onChange(preset.value);
+                                    setIsOpen(false);
+                                }}
+                                className="w-full px-3 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 flex items-center text-gray-900 dark:text-white"
+                            >
+                                {preset.value !== 'default' && (
+                                    <div
+                                        className="rounded text-xs border border-gray-400 flex-grow text-center"
+                                        style={{
+                                            color: preset.text,
+                                            backgroundColor: preset.bg
+                                        }}
+                                    >
+                                        {preset.label}
+                                    </div>
+                                )}
+                                {preset.value === 'default' && (
+                                    <span>{preset.label}</span>
+                                )}
+                            </button>
+                        ))}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
 
 const FILTER_TYPE_OPTIONS = [
     { value: 'highlight', label: 'Matches text' },
@@ -197,64 +372,34 @@ export function FilterModal({ isOpen, onClose, onSave, initialFilter }: FilterMo
                     </div>
 
                     {/* Preset */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Preset
-                        </label>
-                        <select
-                            value={preset}
-                            onChange={(e) => handlePresetChange(e.target.value)}
-                            className="w-full px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-500"
-                        >
-                            {PRESET_COLORS.map((presetOption) => (
-                                <option key={presetOption.value} value={presetOption.value}>
-                                    {presetOption.label}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+                    <PresetDropdown
+                        value={preset}
+                        onChange={handlePresetChange}
+                    />
 
                     {/* Colors */}
                     <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Text Color
-                            </label>
-                            <select
-                                value={textColor}
-                                onChange={(e) => {
-                                    setTextColor(e.target.value);
-                                    setPreset('default');
-                                }}
-                                className="w-full px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-500"
-                            >
-                                {COLOR_OPTIONS.map((option) => (
-                                    <option key={option.value} value={option.value}>
-                                        {option.label}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+                        <ColorDropdown
+                            value={textColor}
+                            onChange={(value) => {
+                                setTextColor(value);
+                                setPreset('default');
+                            }}
+                            options={COLOR_OPTIONS}
+                            label="Text Color"
+                            colorType="text"
+                        />
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Background
-                            </label>
-                            <select
-                                value={backgroundColor}
-                                onChange={(e) => {
-                                    setBackgroundColor(e.target.value);
-                                    setPreset('default');
-                                }}
-                                className="w-full px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-blue-500"
-                            >
-                                {COLOR_OPTIONS.map((option) => (
-                                    <option key={option.value} value={option.value}>
-                                        {option.label}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+                        <ColorDropdown
+                            value={backgroundColor}
+                            onChange={(value) => {
+                                setBackgroundColor(value);
+                                setPreset('default');
+                            }}
+                            options={COLOR_OPTIONS}
+                            label="Background"
+                            colorType="background"
+                        />
                     </div>
 
                     {/* Preview */}

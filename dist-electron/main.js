@@ -67,7 +67,7 @@ ipcMain.handle("open-json-dialog", async () => {
   const content = fs.readFileSync(filePath, "utf-8");
   return { content, path: filePath };
 });
-ipcMain.handle("save-file-dialog", async (_event, defaultName) => {
+ipcMain.handle("save-json-dialog", async (_event, defaultName) => {
   const result = await dialog.showSaveDialog({
     defaultPath: defaultName,
     filters: [{ name: "JSON Files", extensions: ["json"] }]
