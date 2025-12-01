@@ -16,6 +16,7 @@ interface LogStore {
     updateFilter: (id: string, updates: Partial<Filter>) => void;
     removeFilter: (id: string) => void;
     toggleFilter: (id: string) => void;
+    reorderFilter: (filterId: string, newIndex: number) => void;
     addTab: (name: string) => void;
     removeTab: (id: string) => void;
     setActiveTab: (id: string) => void;
@@ -101,6 +102,26 @@ export const useLogStore = create<LogStore>((set, get) => ({
                 filter.id === id ? { ...filter, enabled: !filter.enabled } : filter
             ),
         }));
+
+        set({ tabs: updatedTabs });
+        get().applyFilters();
+    },
+
+    reorderFilter: (filterId: string, newIndex: number) => {
+        const { tabs, activeTabId } = get();
+        const updatedTabs = tabs.map((tab) => {
+            if (tab.id !== activeTabId) return tab;
+
+            const filters = [...tab.filters];
+            const oldIndex = filters.findIndex((f) => f.id === filterId);
+
+            if (oldIndex === -1 || oldIndex === newIndex) return tab;
+
+            const [movedFilter] = filters.splice(oldIndex, 1);
+            filters.splice(newIndex, 0, movedFilter);
+
+            return { ...tab, filters };
+        });
 
         set({ tabs: updatedTabs });
         get().applyFilters();
@@ -257,7 +278,7 @@ export const useLogStore = create<LogStore>((set, get) => ({
     },
 }));
 
-function matchesFilter(text: string, filter: Filter): boolean {
+export function matchesFilter(text: string, filter: Filter): boolean {
     try {
         if (filter.isRegex) {
             const flags = filter.caseSensitive ? '' : 'i';

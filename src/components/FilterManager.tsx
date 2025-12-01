@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { Plus, X, Edit2, Power, PowerOff } from 'lucide-react';
-import { useLogStore } from '../store/useLogStore';
+import { useState, useMemo, DragEvent } from 'react';
+import { Plus, X, Edit2, Power, PowerOff, GripVertical } from 'lucide-react';
+import { useLogStore, matchesFilter } from '../store/useLogStore';
 import { cn } from '../lib/utils';
 import { Filter } from '../types';
 
@@ -10,12 +10,33 @@ interface FilterManagerProps {
 }
 
 export function FilterManager({ onAddFilter, onEditFilter }: FilterManagerProps) {
-    const { tabs, activeTabId, setActiveTab, addTab, removeTab } = useLogStore();
-    const { removeFilter, toggleFilter } = useLogStore();
+    const { tabs, activeTabId, setActiveTab, addTab, removeTab, rawLogLines } = useLogStore();
+    const { removeFilter, toggleFilter, reorderFilter } = useLogStore();
     const [newTabName, setNewTabName] = useState('');
     const [showNewTabInput, setShowNewTabInput] = useState(false);
+    const [draggedFilterId, setDraggedFilterId] = useState<string | null>(null);
+    const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
     const activeTab = tabs.find((tab) => tab.id === activeTabId);
+
+    const filterCounts = useMemo(() => {
+        const counts: Record<string, number> = {};
+        if (!activeTab) return counts;
+
+        activeTab.filters.forEach((filter) => {
+            counts[filter.id] = 0;
+        });
+
+        rawLogLines.forEach((line) => {
+            activeTab.filters.forEach((filter) => {
+                if (matchesFilter(line, filter)) {
+                    counts[filter.id]++;
+                }
+            });
+        });
+
+        return counts;
+    }, [activeTab, rawLogLines]);
 
     const handleAddTab = () => {
         if (newTabName.trim()) {
@@ -41,6 +62,31 @@ export function FilterManager({ onAddFilter, onEditFilter }: FilterManagerProps)
         if (result) {
             useLogStore.getState().loadTabFromJson(activeTabId, result.content);
         }
+    };
+
+    const handleDragStart = (e: DragEvent, filterId: string) => {
+        setDraggedFilterId(filterId);
+        e.dataTransfer.effectAllowed = 'move';
+    };
+
+    const handleDragOver = (e: DragEvent, index: number) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        setDragOverIndex(index);
+    };
+
+    const handleDrop = (e: DragEvent, dropIndex: number) => {
+        e.preventDefault();
+        if (draggedFilterId) {
+            reorderFilter(draggedFilterId, dropIndex);
+        }
+        setDraggedFilterId(null);
+        setDragOverIndex(null);
+    };
+
+    const handleDragEnd = () => {
+        setDraggedFilterId(null);
+        setDragOverIndex(null);
     };
 
     return (
@@ -137,12 +183,31 @@ export function FilterManager({ onAddFilter, onEditFilter }: FilterManagerProps)
                 </div>
 
                 <div className="space-y-2">
-                    {activeTab?.filters.map((filter) => (
+                    {activeTab?.filters.map((filter, index) => (
                         <div
                             key={filter.id}
-                            className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors shadow-sm"
+                            draggable
+                            onDragStart={(e) => handleDragStart(e, filter.id)}
+                            onDragOver={(e) => handleDragOver(e, index)}
+                            onDrop={(e) => handleDrop(e, index)}
+                            onDragEnd={handleDragEnd}
+                            className={cn(
+                                'bg-white dark:bg-gray-800 rounded-lg p-3 border transition-colors shadow-sm',
+                                draggedFilterId === filter.id
+                                    ? 'opacity-50 border-blue-400 dark:border-blue-500'
+                                    : dragOverIndex === index
+                                        ? 'border-blue-400 dark:border-blue-500'
+                                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                            )}
                         >
                             <div className="flex items-start gap-3">
+                                <button
+                                    className="mt-0.5 flex-shrink-0 cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                                    onMouseDown={(e) => e.preventDefault()}
+                                >
+                                    <GripVertical className="w-4 h-4" />
+                                </button>
+
                                 <button
                                     onClick={() => toggleFilter(filter.id)}
                                     className="mt-0.5 flex-shrink-0"
@@ -176,7 +241,10 @@ export function FilterManager({ onAddFilter, onEditFilter }: FilterManagerProps)
                                     </div>
                                 </div>
 
-                                <div className="flex gap-1">
+                                <div className="flex gap-1 items-center">
+                                    <span className="text-xs text-gray-400 mr-1">
+                                        {filterCounts[filter.id] || 0}
+                                    </span>
                                     <button
                                         onClick={() => onEditFilter(filter)}
                                         className="p-1 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
