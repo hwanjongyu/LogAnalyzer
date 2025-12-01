@@ -55,15 +55,19 @@ export function LogViewer({ showOnlyHighlighted }: LogViewerProps) {
                             className={cn(
                                 'px-4 py-0.5 flex hover:bg-gray-200/50 dark:hover:bg-gray-800/50 border-b border-gray-200/50 dark:border-gray-800/30',
                             )}
-                            style={{
-                                color: line.textColor,
-                                backgroundColor: line.backgroundColor,
-                            }}
                         >
                             <span className="text-gray-400 dark:text-gray-500 w-16 flex-shrink-0 text-right mr-4 select-none">
                                 {line.index + 1}
                             </span>
-                            <span className="flex-1 whitespace-pre">{line.text}</span>
+                            <span
+                                className="flex-1 whitespace-pre block"
+                                style={{
+                                    color: line.textColor,
+                                    backgroundColor: line.backgroundColor,
+                                }}
+                            >
+                                {line.text}
+                            </span>
                         </div>
                     )}
                 />
